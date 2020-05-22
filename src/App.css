@@ -1,9 +1,5 @@
 .App {
-  background: #001b44;
-  padding: 0.5rem 0 2rem;
-  height: 100vh;
   min-height: 100vh;
-  max-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;

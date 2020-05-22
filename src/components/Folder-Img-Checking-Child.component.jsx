@@ -8,10 +8,14 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: #f4f4f4;
   padding: 1rem 1.5rem;
+  color: #fff;
+  border-radius: 5px;
+  background: #383e4d;
 `;
-const ResultContainer = styled.div``;
+const ResultContainer = styled.div`
+  margin-bottom: 1rem;
+`;
 const ResultTitle = styled.p``;
 const ResultFolder = styled.div``;
 
@@ -24,7 +28,6 @@ const FolderImgCheckingChild = ({
   setNotes,
   setNoteOpen,
   setToShow,
-  setTaskInProcess,
 }) => {
   const isExist = result['isExist'];
   const resultTitle = isExist
@@ -51,6 +54,18 @@ const FolderImgCheckingChild = ({
     });
     const data = await resJson.json();
     if (data['isExist']) {
+      const resJsonDelete = await fetch(`${url}/api/delete-target-folder`, {
+        method: 'Post',
+        body: JSON.stringify(dataToSend),
+        headers: {
+          'Content-type': 'application/json',
+        },
+      });
+      const deleteResult = await resJsonDelete.json();
+      if (deleteResult.isError) {
+        setNotes('資料異常,請通知系統管理員');
+        return setNoteOpen(true);
+      }
       const resJson = await fetch(`${url}/api/run-training`, {
         method: 'Post',
         body: JSON.stringify(dataToSend),
@@ -59,16 +74,22 @@ const FolderImgCheckingChild = ({
         },
       });
       const resData = await resJson.json();
+
+      // {
+      //   success: true,
+      //   msg: 'xxx_back_train',
+      //   onGoing:[{modelName:"xxx_back_train",isKilled:false},{modelName:"sss_back_train",isKilled:true}]
+      // }
       //run model,close model
       if (resData.success) {
-        setToShow(dataToSend.recipeName);
-        setTaskInProcess(resData.onGoing);
-        return handleClose();
+        handleClose();
+        return setToShow(resData.msg);
       } else {
-        setToShow(dataToSend.recipeName);
-        setNotes(resData.msg);
         setNoteOpen(true);
-        return handleClose();
+
+        setNotes(resData.msg);
+        handleClose();
+        return;
       }
     } else {
       setFolderCheckingResult(data);

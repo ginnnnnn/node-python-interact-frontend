@@ -1,6 +1,6 @@
-import React from "react";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
+import React from 'react';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
 
 export default function AlertDialog({ open, handleClose, children }) {
   return (

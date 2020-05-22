@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Button from '../ui/my-button/My-button.component';
 import TasksInProcess from './Tasks-In-Process.component';
 const Container = styled.div`
-  padding: 1rem 0 0;
   width: 90%;
   height: 100%;
   display: flex;
@@ -19,11 +18,12 @@ const ModelBtnCollectionContainer = styled.div`
 const SettingContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0.5rem;
   width: 100%;
-  margin-top: 1rem;
-  border: 3px solid #ff6300;
-  border-radius: 8px;
+  color: #fff;
+  padding: 1rem 1.5rem;
+  border-radius: 5px;
+  background: #383e4d;
+  box-shadow: 2px 2px 8px 0px rgba(0, 0, 0, 0.2);
 `;
 
 const Title = styled.div`
@@ -35,7 +35,12 @@ const Title = styled.div`
   border-bottom: 1px solid #555555;
 `;
 
-const ControlPannel = ({ toShow, handleSetToShow, taskInProcess }) => {
+const ControlPannel = ({
+  toShow,
+  handleSetToShow,
+  handleSetToShowChart,
+  setToShow,
+}) => {
   return (
     <Container>
       <SettingContainer>
@@ -43,21 +48,32 @@ const ControlPannel = ({ toShow, handleSetToShow, taskInProcess }) => {
         <ModelBtnCollectionContainer>
           <Button
             onClick={() => handleSetToShow('create model')}
-            bg={toShow === 'create model' ? 'red' : ''}
-            w="45%"
+            bg={toShow.type === 'create model' ? 'red' : ''}
+            w="32%"
           >
             新建模型
           </Button>
           <Button
             onClick={() => handleSetToShow('import model')}
-            bg={toShow === 'import model' ? 'red' : ''}
-            w="45%"
+            bg={toShow.type === 'import model' ? 'red' : ''}
+            w="32%"
           >
             匯入模型
           </Button>
+          <Button
+            onClick={() => handleSetToShow('upload model')}
+            bg={toShow.type === 'upload model' ? 'red' : ''}
+            w="32%"
+          >
+            上傳模型
+          </Button>
         </ModelBtnCollectionContainer>
       </SettingContainer>
-      <TasksInProcess taskInProcess={taskInProcess} />
+      <TasksInProcess
+        handleSetToShowChart={handleSetToShowChart}
+        toShow={toShow}
+        setToShow={setToShow}
+      />
     </Container>
   );
 };
